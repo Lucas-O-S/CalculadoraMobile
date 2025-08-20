@@ -9,6 +9,12 @@ export default function App() {
   const [valor2,setValor2] = useState("");
   const [resultado,setResultado] = useState(0);
   const [operacao,setOperacao] = useState('+'); 
+  const [visivel,setVisivel] = useState(false);
+
+  const Calcular = () =>{
+    num1 = parseFloat(valor1);
+    num2 = parseFloat(valor2);
+  }
 
   return (
     <View style={styles.container}>
@@ -71,22 +77,38 @@ export default function App() {
       <TouchableOpacity
         onPress={() =>{
           let temp;
-          if(operacao === "+") temp = parseFloat(valor1) + parseFloat(valor2);
-          else if (operacao === "-") temp = parseFloat(valor1) - parseFloat(valor2);
-          else if (operacao === "x") temp = parseFloat(valor1) * parseFloat(valor2);
-          else if (operacao === "/")  temp =parseFloat(valor1) / parseFloat(valor2);
-          else if (operacao === "^") temp = Math.pow(parseFloat(valor1), parseFloat(valor2));
-          setResultado(temp);
+          if(isNaN(valor1) || valor1 === '' || isNaN(valor2) || valor2 === '') {
+            alert("Preencha os valores corretamente");
+            return;
+
+          }
+          else setVisivel(true);
+          if(visivel){
+            if(operacao === "+") temp = parseFloat(valor1) + parseFloat(valor2);
+            else if (operacao === "-") temp = parseFloat(valor1) - parseFloat(valor2);
+            else if (operacao === "x") temp = parseFloat(valor1) * parseFloat(valor2);
+            else if (operacao === "/")  temp =parseFloat(valor1) / parseFloat(valor2);
+            else if (operacao === "^") temp = Math.pow(parseFloat(valor1), parseFloat(valor2));
+            setResultado(temp);
+            if(isNaN(temp)) {
+              alert("valores invalidos inválido");
+              setVisivel(false);
+            }
+          }
+
         }}
       >
         <Text>Calcular</Text>
       </TouchableOpacity>
 
-      < Text>Resultado</Text>
-      <TextInput
-      >
-        <Text>{resultado}</Text>
-      </TextInput>
+
+        {visivel && (
+          <>
+            < Text>Resultado</Text>
+            <TextInput>{resultado}</TextInput>
+          </>
+        )
+        }
 
       <StatusBar style="auto" />
     </View>
