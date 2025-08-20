@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Touchable, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Touchable, TouchableOpacity, Button } from 'react-native';
 
 
 
@@ -47,85 +47,76 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Primeiro Valor</Text>
+      <Text
+        style={styles.label}
+      >Primeiro Valor</Text>
       <TextInput 
         keyboardType='decimal-pad'
         value={valor1}
+        style={styles.input}
+        placeholder='Digite um valor'
         onChangeText={setValor1}
       />
       
-      <Text>Segundo Valor</Text>
+      <Text
+        style={styles.label}
+      >Segundo Valor</Text>
+      
       <TextInput 
         keyboardType='decimal-pad'
         value={valor2}
-
+        style={styles.input}
+        placeholder='Digite um valor'
         onChangeText={setValor2}
-      />
+    />
+      <Text
+        style={styles.label}
+      >Escolha Operação</Text>
+      <View {...styles.operacoes}>
+          
 
-      <Text>Escolha Operação</Text>
-
-      <TouchableOpacity
-        onPress={() =>{
-          setOperacao("+");
-        }}
-      >
-        <Text>+</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() =>{
-          setOperacao("-");
-        }}
-      >
-        <Text>-</Text>
-      </TouchableOpacity>
-      
-            
-      <TouchableOpacity
-        onPress={() =>{
-          setOperacao("x");
-        }}
-      >
-        <Text>X</Text>
-      </TouchableOpacity>
-      
-
-      <TouchableOpacity
-        onPress={() =>{
-          setOperacao("/");
-        }}
-      >
-        <Text>/</Text>
-      </TouchableOpacity>
-      
-      <TouchableOpacity
-        onPress={() =>{
-          setOperacao("^");
-        }}
-      >
-        <Text>^</Text>
-      </TouchableOpacity>
+        {["+", "-", "x", "/", "^"].map((op) => (
+          <TouchableOpacity
+            key={op}
+            onPress={() => setOperacao(op)}
+            style={[
+              styles.button,
+              operacao === op && styles.buttonSelecionado, 
+            ]}
+          >
+            <Text style={styles.buttonText}>{op}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
       <TouchableOpacity
         onPress={() =>{
           Calcular();
         }}
+        style={styles.button}
       >
-        <Text>Calcular</Text>
+        <Text style={styles.buttonText}>Calcular</Text>
       </TouchableOpacity>
 
        {visivel && (
           <>
-            <Text>Resultado</Text>
-            <Text>{resultado}</Text>
+            <Text
+              style={styles.label}
+            >Resultado</Text>
+            <Text
+              style={styles.label}
+            >{resultado}</Text>
           </>
         )
         }
 
       <TouchableOpacity
         onPress={() => {Limpar();}}
+        style={styles.button}
       >
-        <Text>Limpar</Text>
+        <Text 
+          style={styles.buttonText}
+        >Limpar</Text>
       </TouchableOpacity>
 
 
@@ -136,11 +127,81 @@ export default function App() {
   );
 }
 
+const cores = {
+  primary: '#4A148C',       
+  secondary: '#00BFA6',    
+  background: '#FAFAFA',    
+  inputBackground: '#EEEEEE',
+  text: '#212121',
+  buttonText: '#FFFFFF',
+  error: '#D32F2F',
+  shadow: 'rgb(95, 95, 95)',
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: cores.background,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 20,
   },
+
+  label: {
+    fontSize: 22,
+    color: cores.text,
+    marginBottom: 6,
+    marginTop: 12,
+    fontWeight: "500",
+    textShadowColor: cores.shadow,
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+
+  input: {
+    backgroundColor: cores.inputBackground,
+    width: "60%",
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginBottom: 12,
+    fontSize: 16,
+    shadowColor: cores.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    textAlign: "center",
+    color: cores.text,
+  },
+
+  button: {
+    backgroundColor: cores.primary,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    margin: 5,
+    minWidth: 60,
+  },
+
+  buttonText: {
+    color: cores.buttonText,
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  operacoes: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    marginVertical: 12,
+  },
+
+  buttonSelecionado: {
+    backgroundColor: cores.secondary, 
+    transform: [{ scale: 1.1 }],
+  }
 });
+
+
+
