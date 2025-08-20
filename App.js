@@ -12,8 +12,37 @@ export default function App() {
   const [visivel,setVisivel] = useState(false);
 
   const Calcular = () =>{
-    num1 = parseFloat(valor1);
-    num2 = parseFloat(valor2);
+    let num1 = parseFloat(valor1.replace(",","."));
+    let num2 = parseFloat(valor2.replace(",","."));
+    if(isNaN(num1) || isNaN(num2) ){
+      alert("Preencha os valores corretamente");
+      return;
+    }
+    else{
+      let temp;
+      if(operacao === "+") temp = num1 + num2;
+      else if (operacao === "-") temp = num1 -num2;
+      else if (operacao === "x") temp = num1 *num2;
+      else if (operacao === "/")  temp =num1 /num2;
+      else if (operacao === "^") temp = Math.pow(num1,num2);
+      if(isNaN(temp)) {
+        alert("Operação inválida");
+        return;
+      }
+      else{
+        setResultado(temp);
+        setVisivel(true);
+      }
+
+    }
+  }
+
+  function Limpar(){
+    setValor1("");
+    setValor2("");
+    setVisivel(false);
+    setOperacao("+");
+    setResultado(0);
   }
 
   return (
@@ -21,12 +50,15 @@ export default function App() {
       <Text>Primeiro Valor</Text>
       <TextInput 
         keyboardType='decimal-pad'
+        value={valor1}
         onChangeText={setValor1}
       />
       
       <Text>Segundo Valor</Text>
       <TextInput 
         keyboardType='decimal-pad'
+        value={valor2}
+
         onChangeText={setValor2}
       />
 
@@ -76,41 +108,30 @@ export default function App() {
 
       <TouchableOpacity
         onPress={() =>{
-          let temp;
-          if(isNaN(valor1) || valor1 === '' || isNaN(valor2) || valor2 === '') {
-            alert("Preencha os valores corretamente");
-            return;
-
-          }
-          else setVisivel(true);
-          if(visivel){
-            if(operacao === "+") temp = parseFloat(valor1) + parseFloat(valor2);
-            else if (operacao === "-") temp = parseFloat(valor1) - parseFloat(valor2);
-            else if (operacao === "x") temp = parseFloat(valor1) * parseFloat(valor2);
-            else if (operacao === "/")  temp =parseFloat(valor1) / parseFloat(valor2);
-            else if (operacao === "^") temp = Math.pow(parseFloat(valor1), parseFloat(valor2));
-            setResultado(temp);
-            if(isNaN(temp)) {
-              alert("valores invalidos inválido");
-              setVisivel(false);
-            }
-          }
-
+          Calcular();
         }}
       >
         <Text>Calcular</Text>
       </TouchableOpacity>
 
-
-        {visivel && (
+       {visivel && (
           <>
-            < Text>Resultado</Text>
-            <TextInput>{resultado}</TextInput>
+            <Text>Resultado</Text>
+            <Text>{resultado}</Text>
           </>
         )
         }
 
+      <TouchableOpacity
+        onPress={() => {Limpar();}}
+      >
+        <Text>Limpar</Text>
+      </TouchableOpacity>
+
+
       <StatusBar style="auto" />
+
+
     </View>
   );
 }
